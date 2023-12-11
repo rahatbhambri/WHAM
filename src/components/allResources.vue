@@ -68,6 +68,12 @@
         background-color: green;
         margin-bottom: 10%;
     }
+    
+    li:hover {
+        border-bottom-style: none;
+        border-color: blue;
+        background: purple
+    }
 
     ul {
         background-color: blue;

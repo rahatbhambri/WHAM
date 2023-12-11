@@ -43,11 +43,12 @@
 
 <style scoped >
 .updateform{
-  align-items: center;
+  align-items: right;
   justify-content: center;
   min-height: 100vh;
   padding: 10px;
   font-family: 'Poppins', sans-serif;
   background: linear-gradient(115deg, #56d8e4 10%, #9f01ea 90%);
+  border: 5cm;
 }
 </style>

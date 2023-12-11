@@ -90,6 +90,7 @@ button:focus {
 
 button:hover {
   border-bottom-style: none;
-  border-color: #dadada;
+  border-color: blue;
+  background: orange;
 }
 </style>
