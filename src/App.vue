@@ -1,96 +1,211 @@
 <template>
-  <button @click='setChosen("allresource")'> Stored Resouces</button>
-  <button @click='setChosen("addresource")'> Add Resource </button>
-  <button @click='setChosen("editresource")'> Edit Resource</button>
-  <KeepAlive>
-    <all-resource v-if= 'getChosen("allresource")'  :resource="resource" :updatedRes="updatedRes">
-    </all-resource>
-  </KeepAlive>
-  
+<body>
 
-  <KeepAlive>
-    <add-resource v-if= 'getChosen("addresource")'  @newresource="SetNewResource" > 
-    </add-resource>
-  </KeepAlive>
 
-  <KeepAlive>
-    <edit-resource v-if= 'getChosen("editresource")' @updateresource="updateResource">
-    </edit-resource>
-  </KeepAlive>
+<p style="font-size: xx-large ; font-style: initial; color: rgb(24, 7, 93);"> <strong> Wack a mole! </strong> </p>
+<button @click = "startGame()"> Start Game </button>
+<button @click = "endGame()"> End Game</button>
+
+  <div class = "score" v-if="start">
+    <p> {{  score }}</p>
+  </div>
+
+  <div class = "game" v-if=start>
+    
+      
+      <div class = "hole hole1"> 
+        <div class = "mole mole1" id ="mole1">
+        </div>
+      </div>
+      <div class = "hole hole2"> 
+        <div class = "mole" id ="mole2">
+        </div>
+      </div>
+      <div class = "hole hole3"> 
+        <div class = "mole" id ="mole3">
+        </div>
+      </div>
+      <div class = "hole hole4"> 
+        <div class = "mole" id ="mole4">
+        </div>
+      </div>
+      <div class = "hole hole5"> 
+        <div class = "mole" id ="mole5">
+        </div>
+      </div>
+      <div class = "hole hole6"> 
+        <div class = "mole" id ="mole6">
+        </div>
+      </div>
+      
+  </div>
+
   
+  <div class = "endscreen" v-if=isEnded>
+    <p> Game over! Your overall score is {{ score }}</p>
+  </div>
+  
+</body>
 </template>
   
 
 <script>
-  export default {
-    data() {
+function getRandomInteger(min, max) {
+    return Math.floor(Math.random() * (max - min + 1)) + min;
+}
+
+  export default({
+    data(){
       return {
-        chosen: 'allresource', 
-        resource : null,
-        updatedRes : null
-      };
+        start : false,
+        score : 0, 
+        end : false
+      }
+    }, 
+    computed : {
+      isEnded(){
+        return this.end ;
+      }
     },
-    methods : {
-      setChosen(name){
-        this.chosen = name ;
-      }, 
-      getChosen(name){
-        if (this.chosen === name){
-          return true ;
-        }else{
-          return false ;
+    methods :{
+       async startGame (){
+        this.end = false;
+        this.start = true;
+        this.score = 0 ;
+        while(!this.end){
+          await this.toggleMole();
         }
+
       }, 
-      SetNewResource(payload){
-        console.log(" adding a new resource" + JSON.stringify(payload)) ;
-        this.resource = payload ;
+      incScore(){
+        this.score++ ;
       }, 
-      updateResource(data){
-        console.log(" updating") ;
-        this.updatedRes = data;
+      endGame(){
+        this.start = false ;
+        this.end = true ;
+      }, 
+      async toggleMole(){
+        var hole = document.querySelectorAll('.hole') ;
+        const rand = String(getRandomInteger(0, 5))
+        console.log(rand) ;
+        hole = hole[rand] ;
+        if(hole){
+          var sty = hole.classList ;
+          sty.toggle('up') ;
+          await new Promise(resolve => setTimeout(resolve, 1000) ) ;
+          sty.toggle('up') ;
+        }
+        
       }
     }
-  };
+  })
 </script>
 
 <style scoped>
-button {
-  background: #e62143;
-  border-radius: 11px;
-  box-sizing: border-box;
-  color: #fff;
-  cursor: pointer;
-  font-family: Mija,-apple-system,BlinkMacSystemFont,Roboto,"Roboto Slab","Droid Serif","Segoe UI",system-ui,Arial,sans-serif;
-  font-size: 1.15em;
-  font-weight: 700;
-  justify-content: center;
-  line-height: 33.4929px;
-  padding: .8em 1em;
-  text-align: center;
-  text-decoration: none;
-  text-decoration-skip-ink: auto;
-  text-shadow: rgba(0, 0, 0, .3) 1px 1px 1px;
-  text-underline-offset: 1px;
-  transition: all .2s ease-in-out;
-  user-select: none;
-  -webkit-user-select: none;
-  touch-action: manipulation;
-  width: 30%;
-  word-break: break-word;
-  border: 0;
+html {
+    font-size: 35px;
+    background: #466136;
 }
 
-button:active,
-button:focus {
-  border-bottom-style: none;
-  border-color: #dadada;
-  box-shadow: rgba(0, 0, 0, .3) 0 3px 3px inset;
-  outline: 0;
+body {
+    padding: 0;
+    margin: 0;
+    text-align: center;
+    background-color: rgb(189, 141, 83);
 }
 
-button:hover {
-  border-bottom-style: none;
-  border-color: blue;
-  background: orange;
+h1 {
+    text-align: center;
+    font-size: 100px;
+    line-height: 1;
+    margin-bottom: 0;
+}
+
+.endscreen {
+    background:rgb(90, 1, 110);
+    padding: 0 48px;
+    display: flex;
+    width: 10%;
+    line-height: 1;
+    border-radius: 16px;
+    color: #fff;
+    margin-left: 340px;
+}
+
+.score {
+    background:rgb(189, 9, 9);
+    padding: 0 48px;
+    display: flex;
+    width: 10%;
+    line-height: 1;
+    border-radius: 16px;
+    color: #fff;
+    margin-left: 340px;
+}
+
+.game {
+    width: 800px;
+    height: 1400px;
+    display:flex;
+    flex-wrap:wrap;
+    margin: 0 auto;
+    background-color: aquamarine;
+    
+    
+}
+
+
+.hole{
+    flex: 1 0 33.33%;
+    overflow:visible;
+    position: relative;
+}
+
+.hole:after{
+    display:block;
+    background: url(dirt.png) bottom center no-repeat;
+    background-size:contain;
+    content: '';
+    width: 140%;
+    height: 60%;
+    position: absolute;
+    z-index: 2;
+    /* bottom: -30px; */
+}
+
+.mole {
+    background: url('mole.png') bottom center no-repeat;
+    background-size: 40%;
+    position: absolute;
+    top: 35%;
+    width: 100%;
+    height: 90px;
+    transition: all 0.4s;
+    padding: 10%;
+}
+
+.mole.wacked {
+    background: url('mole_wacked.png') bottom center no-repeat;
+    background-size: 80%;
+    position: absolute;
+    top: 100%;
+    width: 100%;
+    height: 100%;
+    transition: all 0.4s;
+}
+
+.hole.up .mole{
+    top:28%;
+}
+
+button{
+    width:175px;
+    font-size: 35px;
+    height: 120px;
+    color: #fff;
+    background-color: blue;
+    border-radius: 10px;
+    margin-left: 190px;
+    margin-top: 90px;
 }
 </style>
